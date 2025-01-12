@@ -6,23 +6,23 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class PacientesService {
-  private apiUrl = 'https://pacientes-service-162097676670.us-east1.run.app/api/pacientes';
+  private baseUrl = 'https://18gd5vtcm8.execute-api.us-east-1.amazonaws.com';
 
   constructor(private http: HttpClient) {}
 
   getPacientes(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+    return this.http.get<any[]>(`${this.baseUrl}/pacientes`);
   }
 
   addPaciente(nuevoPaciente: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, nuevoPaciente);
+    return this.http.post<any>(`${this.baseUrl}/guardarPaciente`, nuevoPaciente);
   }
 
   updatePaciente(id: number, paciente: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${paciente.rut}`, paciente);
+    return this.http.put<any>(`${this.baseUrl}/updatePaciente/${id}`, paciente);
   }
   
-  deletePaciente(rut: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${rut}`);
+  deletePaciente(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/deletePaciente/${id}`);
   }
 }

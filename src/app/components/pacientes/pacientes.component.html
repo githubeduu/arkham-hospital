@@ -112,7 +112,7 @@
             </div>
             <div class="form-group">
               <label for="edad">Edad</label>
-              <input type="number" class="form-control" id="edad" [(ngModel)]="nuevoPaciente.edad" name="edad" required>
+              <input type="text" class="form-control" id="edad" [(ngModel)]="nuevoPaciente.edad" name="edad" required>
             </div>
             <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Actualizar' : 'Guardar' }}</button>
           </form>

@@ -189,6 +189,11 @@ export class PacientesComponent implements OnInit, AfterViewInit {
 
 
   guardarPaciente() {
+    if (this.nuevoPaciente.rut.includes('-')) {
+      const [rut, dv] = this.nuevoPaciente.rut.split('-'); // Divide por el guion
+      this.nuevoPaciente.rut = rut; // Asigna solo el número al campo rut
+      this.nuevoPaciente.dv = dv;  // Asigna el dígito verificador
+    }
     if (this.isEditMode && this.pacientesSeleccionado) {
       // Lógica para actualizar el producto existente
       this.pacientesService.updatePaciente(this.pacientesSeleccionado.id, this.nuevoPaciente).subscribe(
@@ -243,8 +248,15 @@ export class PacientesComponent implements OnInit, AfterViewInit {
   editarPaciente(paciente: any): void {
     if (paciente) {
       this.pacientesSeleccionado = paciente;
-      this.nuevoPaciente = { ...paciente }; // Clonar los datos del paciente
-      this.openModal(true); // Abrir el modal en modo edición
+
+      // Unificar rut y dv si no vienen juntos
+      if (!paciente.rut.includes('-')) {
+        this.nuevoPaciente.rut = `${paciente.rut}-${paciente.dv}`;
+      } else {
+        this.nuevoPaciente.rut = paciente.rut;
+      }
+  
+      this.openModal(true); // Abre el modal en modo edición
       console.log('Paciente a editar:', this.nuevoPaciente); // Depuración
     } else {
       console.error('No se encontró el paciente para editar');
