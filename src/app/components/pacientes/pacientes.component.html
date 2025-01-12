@@ -1,0 +1,146 @@
+<header>
+    <nav class="navbar navbar-expand-sm navbar-light">
+      <div class="container-fluid">
+        <img src="assets/images/logo/logo.png" alt="Logo Biblioedu">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/index">Inicio</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Pacientes
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" [routerLink]="['/pacientes']">Listado Pacientes</a></li>
+              </ul>
+            </li>
+          </ul>
+          <!-- Sección de autenticación -->
+          <ul class="navbar-nav ml-auto" *ngIf="currentUser; else guest">
+            <li class="nav-item">
+              <span class="nav-link">Hola, {{ currentUser?.displayName || currentUser?.userPrincipalName }}</span>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link cursor-pointer" [routerLink]="['/cuenta']">Mi Cuenta</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link cursor-pointer" (click)="logout()">Cerrar Sesión</a>
+            </li>
+            <!-- Mostrar Mantenedor Productos si el rolId es 1 -->
+            <!-- <li class="nav-item" *ngIf="currentUser && currentUser.rolId === 1">
+              <a class="nav-link" [routerLink]="['/mantenedorProductos']">Mantenedor Productos</a>
+            </li> -->
+          </ul>
+          <ng-template #guest>
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link cursor-pointer" (click)="login()">Iniciar Sesión</a>
+              </li>
+            </ul>
+          </ng-template>
+        </div>
+      </div>
+    </nav>
+  </header>
+<body>
+    <div class="barra-acciones d-flex justify-content-between my-4">
+      <h2>Pacientes</h2>
+      <button class="btn btn-primary" (click)="openAddPacienteModal()">Crear Paciente</button>
+    </div>
+    <div class="tabla-pacientes-container">
+      <table class="table table-striped tabla-pacientes">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>RUT</th>
+            <th>Edad</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let paciente of pacientes">
+            <td>{{ paciente.nombre }}</td>
+            <td>{{ paciente.apellido }}</td>
+            <td>{{ paciente.rut }}-{{ paciente.dv }}</td>
+            <td>{{ paciente.edad }}</td>
+            <td>
+              <button class="btn btn-primary btn-sm" (click)="editarPaciente(paciente)">Editar</button>
+              <button class="btn btn-danger btn-sm" (click)="openDeleteModal(paciente)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <footer>
+      <div class="container">
+           <p>&copy; 2025 Arkham Hospital. Todos los derechos reservados.</p>
+         <ul class="footer-links"></ul>
+      </div>
+    </footer>
+  </body>
+  
+
+  <!-- Modal -->
+  <div *ngIf="showModal" class="modal" tabindex="-1" role="dialog" style="display: block;">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ isEditMode ? 'Editar Paciente' : 'Agregar Paciente' }}</h5>
+          <button type="button" class="close" (click)="closeModal()">
+            <span>&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="guardarPaciente()">
+            <div class="form-group">
+              <label for="nombre">Nombre</label>
+              <input type="text" class="form-control" id="nombre" [(ngModel)]="nuevoPaciente.nombre" name="nombre" required>
+            </div>
+            <div class="form-group">
+              <label for="apellido">Apellido</label>
+              <input type="text" class="form-control" id="apellido" [(ngModel)]="nuevoPaciente.apellido" name="apellido" required>
+            </div>
+            <div class="form-group">
+              <label for="rut">RUT</label>
+              <input type="text" class="form-control" id="rut" [(ngModel)]="nuevoPaciente.rut" name="rut" required>
+            </div>
+            <div class="form-group">
+              <label for="edad">Edad</label>
+              <input type="number" class="form-control" id="edad" [(ngModel)]="nuevoPaciente.edad" name="edad" required>
+            </div>
+            <button type="submit" class="btn btn-primary">{{ isEditMode ? 'Actualizar' : 'Guardar' }}</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <!-- Delete Confirmation Modal -->
+<div *ngIf="showDeleteModal" class="modal" tabindex="-1" role="dialog" style="display: block;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar Eliminación</h5>
+        <button type="button" class="close" (click)="closeDeleteModal()">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>¿Estás seguro de que deseas eliminar el paciente?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeDeleteModal()">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="eliminarPaciente()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+
+      

@@ -79,44 +79,6 @@ main {
   overflow: hidden;
 }
 
-table {
-  width: 100%;
-  margin-bottom: 1rem;
-  background-color: #fff;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid #dee2e6;
-
-  th, td {
-    padding: 0.75rem;
-    vertical-align: top;
-    border-top: 1px solid #dee2e6;
-  }
-
-  thead th {
-    vertical-align: bottom;
-    border-bottom: 2px solid #dee2e6;
-    background-color: #f2f2f2;
-  }
-
-  tbody + tbody {
-    border-top: 2px solid #dee2e6;
-  }
-
-  tbody tr:nth-of-type(odd) {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-}
-
-.table-responsive {
-  overflow-x: auto;
-}
-
-.table img {
-  max-width: 100%;
-  height: auto;
-}
 
 .btn-eliminar, .btn-editar {
   color: #fff;
@@ -193,34 +155,6 @@ table {
   background-color: #fff; // Color de fondo del prefijo en el input de precio
 }
 
-@media (max-width: 768px) {
-  table thead {
-    display: none; /* Oculta la cabecera en dispositivos móviles */
-  }
-
-  table tbody tr {
-    display: block;
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 10px;
-  }
-
-  table tbody td {
-    display: block;
-    text-align: left;
-  }
-
-  table tbody td:before {
-    content: attr(data-label);
-    font-weight: bold;
-    display: inline-block;
-    width: 100px; /* Ajusta el ancho según necesites */
-    margin-right: 5px; /* Espacio entre el label y el valor */
-  }
-
-  header img {
-    width: 100px;
-  }
-}
 
 /* Estilos específicos para los form-floating */
 .form-floating>.form-control {
@@ -336,3 +270,4 @@ table {
     }
   }
 }
+

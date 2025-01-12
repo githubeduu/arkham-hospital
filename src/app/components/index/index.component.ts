@@ -4,7 +4,6 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from '../../services/usuario-service/usuario.service';
-import { LibroService } from '../../services/libro-service/libro.service';
 import { catchError, of, tap } from 'rxjs';
 import { MsalService } from '@azure/msal-angular';
 
@@ -26,7 +25,6 @@ export class IndexComponent implements AfterViewInit {
     private el: ElementRef,
     @Inject(PLATFORM_ID) private platformId: Object,
     private readonly userService: UserService,
-    private readonly libroService: LibroService,
     private readonly msalService: MsalService
   ) {}
 
@@ -48,22 +46,6 @@ export class IndexComponent implements AfterViewInit {
     }).catch((error) => {
       console.error('Error during MSAL redirect handling:', error);
     });
-
-     // Cargar productos (sin cambios)
-     this.libroService.getAllBook().pipe(
-      tap((data: any[]) => {
-        if (Array.isArray(data)) {
-          this.products = data.filter(book => book.id >= 100);
-        } else {
-          this.products = [];
-        }
-      }),
-      catchError((error) => {
-        console.error('Error fetching products:', error);
-        this.products = [];
-        return of([]);
-      })
-    ).subscribe();
   }
   
 
@@ -74,6 +56,7 @@ export class IndexComponent implements AfterViewInit {
         this.msalService.instance.setActiveAccount(res.account);
         this.currentUser = this.msalService.instance.getActiveAccount();
         this.getUserProfile(); // Obtener información adicional del usuario
+        window.location.reload();
       },
       error: (error) => {
         console.error('Error during login:', error);
