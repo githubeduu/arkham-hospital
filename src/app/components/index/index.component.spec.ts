@@ -5,7 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { PLATFORM_ID } from '@angular/core';
 import { UserService } from '../../services/usuario-service/usuario.service';
 import { of, throwError } from 'rxjs';
-import { LibroService } from '../../services/libro-service/libro.service';
 
 describe('IndexComponent', () => {
   let component: IndexComponent;
@@ -26,17 +25,6 @@ describe('IndexComponent', () => {
       ])
     ),
   };
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [IndexComponent, RouterTestingModule, HttpClientModule], // Usa `imports` para componentes standalone
-      providers: [
-        { provide: UserService, useValue: mockUserService },
-        { provide: LibroService, useValue: mockLibroService},
-        { provide: PLATFORM_ID, useValue: 'browser' }, // Simula el entorno navegador
-      ],
-    }).compileComponents();
-  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(IndexComponent);

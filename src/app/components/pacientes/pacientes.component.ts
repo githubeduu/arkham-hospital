@@ -6,10 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { MsalService } from '@azure/msal-angular';
 import { UserService } from '../../services/usuario-service/usuario.service';
 import { PacientesService } from '../../services/paciente-service/paciente.service';
+import { VitalesService } from '../../services/vitales/vitales.service';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, RouterModule, HttpClientModule, FormsModule],
+  imports: [CommonModule, RouterModule, HttpClientModule, FormsModule, NgxPaginationModule],
   selector: 'app-pacientes',
   templateUrl: './pacientes.component.html',
   styleUrls: ['./pacientes.component.scss'],
@@ -21,7 +23,8 @@ export class PacientesComponent implements OnInit, AfterViewInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     private readonly userService: UserService,
     private readonly msalService: MsalService,
-    private pacientesService: PacientesService
+    private pacientesService: PacientesService,
+    private vitalesService: VitalesService
   ) {}
 
   currentUser: any;
@@ -38,6 +41,13 @@ export class PacientesComponent implements OnInit, AfterViewInit {
   pacientesSeleccionado: any = null;
   showDeleteModal: boolean = false; 
   pacienteToDelete: any = null;
+  showSignosVitalesModal: boolean = false;
+  pacienteActual: any = null;
+  signosVitales: any[] = []; // Lista completa de signos vitales
+  signosVitalesPaginados: any[] = []; // Lista para mostrar por página
+  page: number = 1;
+  pageSize: number = 5; // Cantidad de registros por página
+
 
    /**
    * Abre el modal para agregar o editar un producto.
@@ -56,23 +66,6 @@ export class PacientesComponent implements OnInit, AfterViewInit {
     this.isEditMode = false;
     this.pacientesSeleccionado = null;
     this.resetForm();
-  }
-
-   /**
-   * Abre el modal para confirmar la eliminación de un producto.
-   * @param product Producto a eliminar.
-   */
-   openDeleteModal(product: any) {
-    this.showDeleteModal = true;
-    this.pacienteToDelete = product;
-  }
-
-  /**
-   * Cierra el modal de eliminación de producto.
-   */
-  closeDeleteModal() {
-    this.showDeleteModal = false;
-    this.pacienteToDelete = null;
   }
 
   /**
@@ -226,7 +219,46 @@ export class PacientesComponent implements OnInit, AfterViewInit {
     }
   }
 
- 
+  editarPaciente(paciente: any): void {
+    if (paciente) {
+      this.pacientesSeleccionado = paciente;
+  
+      // Asignar todos los datos correctamente
+      this.nuevoPaciente = {
+        nombre: paciente.nombre || '',
+        apellido: paciente.apellido || '',
+        rut: paciente.rut.includes('-') ? paciente.rut : `${paciente.rut}-${paciente.dv}`,
+        dv: paciente.dv || '',
+        edad: paciente.edad || null,
+      };
+  
+      this.openModal(true); // Abre el modal en modo edición
+      console.log('Paciente a editar:', this.nuevoPaciente); // Depuración
+    } else {
+      console.error('No se encontró el paciente para editar');
+    }
+  }
+
+
+     /**
+   * Abre el modal para confirmar la eliminación de un producto.
+   * @param product Producto a eliminar.
+   */
+     openDeleteModal(paciente: any) {
+      this.showDeleteModal = true;
+      this.pacienteToDelete = paciente;
+    }
+  
+    /**
+     * Cierra el modal de eliminación de pacientes.
+     */
+    closeDeleteModal() {
+      this.showDeleteModal = false;
+      this.pacienteToDelete = null;
+    }
+  
+
+
   eliminarPaciente() {
     if (this.pacienteToDelete) {
       this.pacientesService.deletePaciente(this.pacienteToDelete.id).subscribe(
@@ -245,23 +277,38 @@ export class PacientesComponent implements OnInit, AfterViewInit {
   }
 
 
-  editarPaciente(paciente: any): void {
-    if (paciente) {
-      this.pacientesSeleccionado = paciente;
+  openSignosVitalesModal() {
+    this.showSignosVitalesModal = true;
+  }
 
-      // Unificar rut y dv si no vienen juntos
-      if (!paciente.rut.includes('-')) {
-        this.nuevoPaciente.rut = `${paciente.rut}-${paciente.dv}`;
-      } else {
-        this.nuevoPaciente.rut = paciente.rut;
-      }
   
-      this.openModal(true); // Abre el modal en modo edición
-      console.log('Paciente a editar:', this.nuevoPaciente); // Depuración
-    } else {
-      console.error('No se encontró el paciente para editar');
+  verSignosVitales(paciente: any) {
+    if (paciente) {
+      this.pacienteActual = paciente;
+
+      // Llamar al servicio para obtener los signos vitales del paciente
+      this.vitalesService.getSenalesVitales(paciente.id).subscribe({
+        next: (data) => {
+          this.signosVitales = data;
+          this.cambiarPagina(1); // Cargar primera página
+          this.showSignosVitalesModal = true;
+        },
+        error: (err) => console.error('Error obteniendo signos vitales:', err)
+      });
     }
   }
-  
+
+  cambiarPagina(pagina: number) {
+    this.page = pagina;
+    const startIndex = (pagina - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.signosVitalesPaginados = this.signosVitales.slice(startIndex, endIndex);
+  }
+
+  closeSignosVitalesModal() {
+    this.showSignosVitalesModal = false;
+    this.pacienteActual = null;
+    this.signosVitales = [];
+  }
 
 }

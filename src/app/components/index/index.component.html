@@ -30,10 +30,6 @@
           <li class="nav-item">
             <a class="nav-link cursor-pointer" (click)="logout()">Cerrar Sesión</a>
           </li>
-          <!-- Mostrar Mantenedor Productos si el rolId es 1 -->
-          <!-- <li class="nav-item" *ngIf="currentUser && currentUser.rolId === 1">
-            <a class="nav-link" [routerLink]="['/mantenedorProductos']">Mantenedor Productos</a>
-          </li> -->
         </ul>
         <ng-template #guest>
           <ul class="navbar-nav ml-auto">

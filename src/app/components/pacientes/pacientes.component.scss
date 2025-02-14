@@ -1,0 +1,27 @@
+.modal {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5); /* Fondo oscuro para resaltar el modal */
+  }
+  
+  .modal-dialog-vital {
+    max-width: 80% !important; /* Ajusta el tamaño del modal */
+    width: 1000px !important; /* Define un ancho específico */
+  }
+  
+  .modal-content-vital {
+    padding: 20px;
+    border-radius: 10px; /* Bordes redondeados */
+  }
+  
+  .modal-body-vital {
+    max-height: 500px; /* Ajusta la altura máxima */
+    overflow-y: auto; /* Permite desplazamiento si hay muchos datos */
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: center;
+  }
+  

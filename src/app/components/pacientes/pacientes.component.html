@@ -68,10 +68,11 @@
             <td>{{ paciente.apellido }}</td>
             <td>{{ paciente.rut }}-{{ paciente.dv }}</td>
             <td>{{ paciente.edad }}</td>
-            <td>
-              <button class="btn btn-primary btn-sm" (click)="editarPaciente(paciente)">Editar</button>
+            <td class="d-flex gap-2">
+              <button class="btn btn-primary btn-sm" (click)="verSignosVitales(paciente)">Ver Signos Vitales Critico</button>
+              <button class="btn btn-warning btn-sm" (click)="editarPaciente(paciente)">Editar</button>
               <button class="btn btn-danger btn-sm" (click)="openDeleteModal(paciente)">Eliminar</button>
-            </td>
+            </td>            
           </tr>
         </tbody>
       </table>
@@ -84,7 +85,48 @@
       </div>
     </footer>
   </body>
+
   
+  <!-- Ver signos vitales Modal -->
+<div *ngIf="showSignosVitalesModal" class="modal" tabindex="-1" role="dialog" style="display: block;">
+  <div class="modal-dialog modal-dialog-vital" role="document">
+    <div class="modal-content modal-content-vital">
+      <div class="modal-header">
+        <h5 class="modal-title">Signos Vitales de {{ pacienteActual?.nombre }} {{ pacienteActual?.apellido }}</h5>
+        <button type="button" class="close" (click)="closeSignosVitalesModal()">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-body-vital">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Frecuencia Cardiaca</th>
+              <th>Presión Arterial</th>
+              <th>Temperatura Corporal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let signo of signosVitalesPaginados">
+              <td>{{ signo.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ signo.heartRate }} bpm</td>
+              <td>{{ signo.bloodPressure }}</td>
+              <td>{{ signo.bodyTemperature }} °C</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Paginación -->
+        <pagination-controls (pageChange)="cambiarPagina($event)"></pagination-controls>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeSignosVitalesModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
   <!-- Modal -->
   <div *ngIf="showModal" class="modal" tabindex="-1" role="dialog" style="display: block;">
@@ -141,6 +183,10 @@
       </div>
     </div>
   </div>
+
+
+
+
 
 
       
