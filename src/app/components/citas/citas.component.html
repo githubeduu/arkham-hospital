@@ -1,0 +1,104 @@
+
+<header>
+  <nav class="navbar navbar-expand-sm navbar-light">
+    <div class="container-fluid">
+      <img src="assets/images/logo/logo.png" alt="Logo Biblioedu">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/index">Inicio</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Pacientes
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" [routerLink]="['/pacientes']">Listado Pacientes</a></li>
+            </ul>
+          </li>
+        </ul>
+        <!-- Sección de autenticación -->
+        <ul class="navbar-nav ml-auto" *ngIf="currentUser; else guest">
+          <li class="nav-item">
+            <span class="nav-link">Hola, {{ currentUser?.displayName || currentUser?.userPrincipalName }}</span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link cursor-pointer" [routerLink]="['/cuenta']">Mi Cuenta</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link cursor-pointer" (click)="logout()">Cerrar Sesión</a>
+          </li>
+          <!-- Mostrar Mantenedor Productos si el rolId es 1 -->
+          <!-- <li class="nav-item" *ngIf="currentUser && currentUser.rolId === 1">
+            <a class="nav-link" [routerLink]="['/mantenedorProductos']">Mantenedor Productos</a>
+          </li> -->
+        </ul>
+        <ng-template #guest>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link cursor-pointer" (click)="login()">Iniciar Sesión</a>
+            </li>
+          </ul>
+        </ng-template>
+      </div>
+    </div>
+  </nav>
+</header>
+<body>
+<div class="container mt-4">
+  <h2>Reserva tu Cita Médica</h2>
+  <form (ngSubmit)="reservarCita()">
+    <!-- Datos del Paciente -->
+    <div class="form-group">
+      <label>Nombre del Paciente</label>
+      <input type="text" class="form-control" [(ngModel)]="reserva.cliente.nombre" name="nombre" required>
+    </div>
+
+    <div class="form-group">
+      <label>Correo</label>
+      <input type="email" class="form-control" [(ngModel)]="reserva.cliente.correo" name="correo" required>
+    </div>
+
+    <div class="form-group">
+      <label>RUT</label>
+      <input type="text" class="form-control" [(ngModel)]="reserva.cliente.rut" name="rut" required>
+    </div>
+
+    <!-- Datos de la Cita -->
+    <div class="form-group">
+      <label>Especialidad</label>
+      <select class="form-control" [(ngModel)]="reserva.cita.especialidad" name="especialidad" required>
+        <option value="Cardiología">Cardiología</option>
+        <option value="Traumatología">Traumatología</option>
+        <option value="Pediatría">Pediatría</option>
+        <option value="Oftalmología">Oftalmología</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Fecha y Hora</label>
+      <input type="datetime-local" class="form-control" [(ngModel)]="reserva.cita.fechaHora" name="fechaHora" required>
+    </div>
+
+    <div class="form-group">
+      <label>Doctor</label>
+      <input type="text" class="form-control" [(ngModel)]="reserva.cita.doctor" name="doctor" required>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Reservar Cita</button>
+  </form>
+
+  <div *ngIf="mensaje" class="alert alert-success mt-3">
+    {{ mensaje }}
+  </div>
+</div>
+<footer>
+    <div class="container">
+      <p>&copy; 2025 Arkham Hospital. Todos los derechos reservados.</p>
+      <ul class="footer-links"></ul>
+    </div>
+  </footer>
+</body>
