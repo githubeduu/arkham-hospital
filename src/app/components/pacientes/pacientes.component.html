@@ -30,10 +30,6 @@
             <li class="nav-item">
               <a class="nav-link cursor-pointer" (click)="logout()">Cerrar Sesión</a>
             </li>
-            <!-- Mostrar Mantenedor Productos si el rolId es 1 -->
-            <!-- <li class="nav-item" *ngIf="currentUser && currentUser.rolId === 1">
-              <a class="nav-link" [routerLink]="['/mantenedorProductos']">Mantenedor Productos</a>
-            </li> -->
           </ul>
           <ng-template #guest>
             <ul class="navbar-nav ml-auto">
@@ -42,42 +38,51 @@
               </li>
             </ul>
           </ng-template>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="btn btn-primary" [routerLink]="['/citas']">Reserva de Hora</a>
+            </li>
+          </ul>  
         </div>
       </div>
     </nav>
   </header>
 <body>
-    <div class="barra-acciones d-flex justify-content-between my-4">
-      <h2>Pacientes</h2>
-      <button class="btn btn-primary" (click)="openAddPacienteModal()">Crear Paciente</button>
+  <div class="contenedor-pacientes">
+    <div class="barra-acciones">
+        <h2>Pacientes</h2>
+        <button class="btn btn-primary btn-sm" (click)="openAddPacienteModal()">Crear Paciente</button>
     </div>
+
     <div class="tabla-pacientes-container">
-      <table class="table table-striped tabla-pacientes">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>RUT</th>
-            <th>Edad</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let paciente of pacientes">
-            <td>{{ paciente.nombre }}</td>
-            <td>{{ paciente.apellido }}</td>
-            <td>{{ paciente.rut }}-{{ paciente.dv }}</td>
-            <td>{{ paciente.edad }}</td>
-            <td class="d-flex gap-2">
-              <button class="btn btn-primary btn-sm" (click)="verSignosVitales(paciente)">Ver Signos Vitales Critico</button>
-              <button class="btn btn-warning btn-sm" (click)="editarPaciente(paciente)">Editar</button>
-              <button class="btn btn-danger btn-sm" (click)="openDeleteModal(paciente)">Eliminar</button>
-            </td>            
-          </tr>
-        </tbody>
-      </table>
+        <table class="table table-striped tabla-pacientes">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>RUT</th>
+                    <th>Edad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let paciente of pacientes">
+                    <td>{{ paciente.nombre }}</td>
+                    <td>{{ paciente.apellido }}</td>
+                    <td>{{ paciente.rut }}-{{ paciente.dv }}</td>
+                    <td>{{ paciente.edad }}</td>
+                    <td class="d-flex justify-content-center gap-2">
+                        <button class="btn btn-primary btn-sm" (click)="verSignosVitales(paciente)">Ver Signos Vitales</button>
+                        <button class="btn btn-warning btn-sm" (click)="editarPaciente(paciente)">Editar</button>
+                        <button class="btn btn-danger btn-sm" (click)="openDeleteModal(paciente)">Eliminar</button>
+                    </td>            
+                </tr>
+            </tbody>
+        </table>
     </div>
-    
+</div>
+
+
     <footer>
       <div class="container">
            <p>&copy; 2025 Arkham Hospital. Todos los derechos reservados.</p>

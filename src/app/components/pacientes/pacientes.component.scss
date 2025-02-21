@@ -1,27 +1,84 @@
-.modal {
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.5); /* Fondo oscuro para resaltar el modal */
-  }
-  
   .modal-dialog-vital {
-    max-width: 80% !important; /* Ajusta el tamaño del modal */
-    width: 1000px !important; /* Define un ancho específico */
+    max-width: 80% !important;
+    width: 1000px !important;
   }
   
   .modal-content-vital {
     padding: 20px;
-    border-radius: 10px; /* Bordes redondeados */
+    border-radius: 10px;
   }
   
   .modal-body-vital {
-    max-height: 500px; /* Ajusta la altura máxima */
-    overflow-y: auto; /* Permite desplazamiento si hay muchos datos */
+    max-height: 500px;
+    overflow-y: auto;
   }
   
-  .modal-footer {
+  .barra-acciones {
     display: flex;
-    justify-content: center;
-  }
-  
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 20px;
+}
+
+/* Contenedor principal más ancho */
+.contenedor-pacientes {
+  max-width: 90%; /* Ampliamos más el ancho */
+  margin: auto;
+}
+
+/* Sección superior con título y botón más alineados */
+.barra-acciones {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Título con tamaño adecuado */
+.barra-acciones h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Botón "Crear Paciente" más grande */
+.barra-acciones button {
+  font-size: 16px;
+  padding: 10px 18px;
+}
+
+/* Ajustamos el contenedor de la tabla */
+.tabla-pacientes-container {
+  max-width: 100%;
+  margin: auto;
+}
+
+/* Hacemos la tabla más ancha */
+.tabla-pacientes {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Encabezados más grandes y llamativos */
+.tabla-pacientes thead {
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+}
+
+/* Celdas más grandes para mejor lectura */
+.tabla-pacientes td, .tabla-pacientes th {
+  padding: 14px; /* Más espacio interno */
+  text-align: center;
+  font-size: 16px; /* Letra más grande */
+}
+
+/* Botones más grandes y bien distribuidos */
+.btn-sm {
+  font-size: 15px;
+  padding: 10px 16px;
+  border-radius: 6px;
+}
